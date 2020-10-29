@@ -20,7 +20,7 @@ function fetchSlides(keyword) {
             document.body.appendChild(newElem);
             stopButton = createNewElement('button', 'CLOSE');
             stopButton.id = 'stop';
-            newElem.appendChild(stopButton);
+            document.body.appendChild(stopButton);
             changePhoto = setInterval(updateImgSrc, 3000, drinkData);
             //stop:
             document.getElementById('stop').addEventListener('click', clearDisplay);
@@ -67,11 +67,15 @@ function updateImgSrc(drinkObj) {
     }
     const drinkImg = document.querySelector('img');
     let url = drinkObj.drinks[index].strDrinkThumb;
-    drinkImg.style.opacity = 0;
+    //drinkImg.style.opacity = 0;
+    //setTimeout(function() {
+    drinkImg.setAttribute('src', url);
+    drinkImg.classList.add('slide-in');
     setTimeout(function() {
-        drinkImg.setAttribute('src', url);
-        drinkImg.style.opacity = 1;
-    }, 1000);
+        drinkImg.classList.remove('slide-in');
+    }, 500);
+    //drinkImg.style.opacity = 1;
+    // }, 500);
     let drinkTitle = document.querySelector('h5');
     drinkTitle.innerText = drinkObj.drinks[index].strDrink;
 }
@@ -81,6 +85,8 @@ function clearDisplay() {
     clearInterval(changePhoto);
     const imgDisplay = document.querySelector('.displayContainer');
     document.body.removeChild(imgDisplay);
+    const stopButton = document.querySelector('#stop');
+    document.body.removeChild(stopButton);
     document.querySelector('input').value = '';
     index = 0;
 }

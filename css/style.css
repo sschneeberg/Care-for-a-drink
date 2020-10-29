@@ -1,0 +1,101 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background: rgb(24, 14, 59);
+    color: whitesmoke;
+}
+
+form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 10em;
+}
+
+label {
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+input {
+    border: 0;
+    border-bottom: 2px solid whitesmoke;
+    background-color: rgb(24, 14, 59);
+    color: rgb(128, 128, 133);
+    width: 30vw;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+button {
+    border: 2px solid whitesmoke;
+    background-color: rgb(24, 14, 59);
+    color: whitesmoke;
+    padding: 0.5rem;
+}
+
+form p {
+    font-size: 0.75rem;
+    color: rgb(177, 177, 177);
+    margin-top: -0.5rem;
+}
+
+input:focus,
+button:focus {
+    outline: none;
+}
+
+.displayContainer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 55vh;
+    width: fit-content;
+    background: rgb(51, 13, 95);
+    border-radius: 6px;
+    z-index: 1;
+    box-shadow: 1px 1px 2px 5px rgb(32, 32, 32);
+}
+
+.displayContainer img {
+    margin: 1em;
+    border-radius: 6px;
+    max-height: 55vh;
+}
+
+.displayContainer p {
+    width: 80%;
+    text-align: center;
+    margin: 1em;
+}
+
+.displayContainer h5 {
+    position: absolute;
+    top: 75%;
+    right: 50%;
+    transform: translate(50%, 0);
+    text-transform: uppercase;
+    visibility: hidden;
+    font-family: 'Bad Script', cursive;
+    width: fit-content;
+    color: rgba(44, 21, 44, 0.842);
+    text-shadow: 1px 1px rgb(152, 137, 156);
+}
+
+.displayContainer:hover h5 {
+    visibility: visible;
+}
+
+button#stop {
+    position: absolute;
+    top: 110%;
+}

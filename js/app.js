@@ -67,7 +67,11 @@ function updateImgSrc(drinkObj) {
     }
     const drinkImg = document.querySelector('img');
     let url = drinkObj.drinks[index].strDrinkThumb;
-    drinkImg.setAttribute('src', url);
+    drinkImg.style.opacity = 0;
+    setTimeout(function() {
+        drinkImg.setAttribute('src', url);
+        drinkImg.style.opacity = 1;
+    }, 1000);
     let drinkTitle = document.querySelector('h5');
     drinkTitle.innerText = drinkObj.drinks[index].strDrink;
 }

@@ -10,17 +10,36 @@
 
 function fetchSlides(keyword) {
     //using TheCocktailDb: https://www.thecocktaildb.com/api.php?ref=apilist.fun for practice/educational purposes only
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${keyword}`)
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${keyword}`)
         .then(response => response.json())
         .then(drinkData => {
             let drink = drinkData.drinks[0];
             const url = drink.strDrinkThumb;
             const title = drink.strDrink;
-            newElem = createImgElement(url, title);
-            document.body.appendChild(newElem);
+            const ingredients = getList(drink, 'Ingredient');
+            const measurements = getList(drink, 'Measure');
+            const recipe = drink.strInstructions;
+            newDrink = createImgElement(url, title);
+            document.body.appendChild(newDrink);
+            drinkRecipe = createRecipeElement(ingredients, measurements, recipe);
+            /* BOOTSTRAP COLLAPSE TRIGGER
+            <p>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+              Button with data-target
+            </button>
+            </p> */
+            collapseButton = createNewElement('button', 'MORE');
+            collapseButton.setAttribute('id', 'recipe');
+            collapseButton.setAttribute('type', 'button');
+            collapseButton.setAttribute('data-toggle', 'collapse');
+            collapseButton.setAttribute('data-target', '#collapseRecipe');
+            collapseButton.setAttribute('aria-expanded', 'false');
+            collapseButton.setAttribute('aria-controls', 'collapseRecipe');
             stopButton = createNewElement('button', 'CLOSE');
             stopButton.id = 'stop';
             document.body.appendChild(stopButton);
+            document.body.appendChild(collapseButton);
+            document.body.appendChild(drinkRecipe);
             changePhoto = setInterval(updateImgSrc, 3000, drinkData);
             //stop:
             document.getElementById('stop').addEventListener('click', clearDisplay);
@@ -57,6 +76,39 @@ function createImgElement(url, title) {
     return container;
 }
 
+function createRecipeElement(ingredients, measurements, recipe) {
+    /* BOOTSTRAP COLLAPSE CONTENT
+    <div class="collapse" id="collapseExample">
+      <div class="card card-body">
+        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+      </div>
+    </div>
+    */
+    collapse = createNewElement('div');
+    collapse.classList.add('collapse');
+    collapse.setAttribute('id', 'collapseRecipe');
+    card = createNewElement('div');
+    card.classList.add('card');
+    card.classList.add('card-body');
+    ingredientList = createNewElement('ul');
+    for (i = 0; i < ingredients.length; i++) {
+        if (ingredients[i] != measurements[i]) {
+            if (measurements[i] === null) {
+                ingredient = createNewElement('li', `${ingredients[i]}`);
+            } else {
+                ingredient = createNewElement('li', `${measurements[i]} of ${ingredients[i]}`);
+            }
+            ingredientList.appendChild(ingredient);
+        }
+    }
+    recipeText = createNewElement('p', recipe);
+    recipeText.classList.add('recipeText');
+    card.appendChild(ingredientList);
+    card.appendChild(recipeText);
+    collapse.appendChild(card);
+    return collapse
+}
+
 //update img element
 function updateImgSrc(drinkObj) {
     //grab next drink by increasing
@@ -66,7 +118,8 @@ function updateImgSrc(drinkObj) {
         index = 0; //loop to start
     }
     const drinkImg = document.querySelector('img');
-    let url = drinkObj.drinks[index].strDrinkThumb;
+    let drink = drinkObj.drinks[index];
+    let url = drink.strDrinkThumb;
     //drinkImg.style.opacity = 0;
     //setTimeout(function() {
     drinkImg.setAttribute('src', url);
@@ -77,7 +130,34 @@ function updateImgSrc(drinkObj) {
     //drinkImg.style.opacity = 1;
     // }, 500);
     let drinkTitle = document.querySelector('h5');
-    drinkTitle.innerText = drinkObj.drinks[index].strDrink;
+    drinkTitle.innerText = drink.strDrink;
+    updateRecipe(drink);
+}
+
+function updateRecipe(drink) {
+    const ingredients = getList(drink, 'Ingredient');
+    const measurements = getList(drink, 'Measure');
+    const recipe = drink.strInstructions;
+    recipeText = document.querySelector('.recipeText')
+    recipeText.innerText = recipe;
+    list = document.querySelector('ul');
+    card = document.querySelector('.card-body');
+    card.removeChild(list);
+    ingredientList = createNewElement('ul');
+    for (i = 0; i < ingredients.length; i++) {
+        if (ingredients[i] != measurements[i]) {
+            if (measurements[i] === null) {
+                ingredient = createNewElement('li', `${ingredients[i]}`);
+            } else {
+                ingredient = createNewElement('li', `${measurements[i]} of ${ingredients[i]}`);
+            }
+            ingredientList.appendChild(ingredient);
+        }
+    }
+    card.insertBefore(ingredientList, recipeText);
+
+
+    //got updated info, now change the DOM
 }
 
 //clear screen
@@ -87,6 +167,10 @@ function clearDisplay() {
     document.body.removeChild(imgDisplay);
     const stopButton = document.querySelector('#stop');
     document.body.removeChild(stopButton);
+    const recipeButton = document.querySelector('#recipe');
+    document.body.removeChild(recipeButton);
+    const collapse = document.querySelector('.collapse');
+    document.body.removeChild(collapse);
     document.querySelector('input').value = '';
     index = 0;
 }
@@ -103,6 +187,16 @@ function createErrorElement() {
     container.appendChild(msg);
     return container
 
+}
+
+//get lsit of ingredients and measurements
+function getList(drink, listname) {
+    let list = [];
+    for (i = 1; i < 16; i++) {
+        //no drink has more than 15 things listed
+        list.push(drink[`str${listname}${i}`]);
+    }
+    return list;
 }
 
 //globals:

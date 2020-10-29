@@ -4,7 +4,6 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    width: 100vw;
     background: rgb(24, 14, 59);
     color: whitesmoke;
 }
@@ -115,4 +114,23 @@ button:focus {
 button#stop {
     position: absolute;
     top: 80%;
+}
+
+button#recipe {
+    position: absolute;
+    top: 88%
+}
+
+.card {
+    background: rgb(24, 14, 59);
+}
+
+div#collapseRecipe {
+    position: absolute;
+    top: 95%;
+    width: 55vh;
+}
+
+ul {
+    list-style-type: none;
 }

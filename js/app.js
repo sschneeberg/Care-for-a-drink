@@ -28,7 +28,7 @@ function fetchSlides(keyword) {
               Button with data-target
             </button>
             </p> */
-            collapseButton = createNewElement('button', 'MORE');
+            collapseButton = createNewElement('button', 'RECIPE');
             collapseButton.setAttribute('id', 'recipe');
             collapseButton.setAttribute('type', 'button');
             collapseButton.setAttribute('data-toggle', 'collapse');
